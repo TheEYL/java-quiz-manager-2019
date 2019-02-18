@@ -36,8 +36,8 @@ select * from question;*/
 			insertStatement.setString(1, question.getQuestion());
 			insertStatement.setInt(2, question.getDifficulty());
 			
-//			insertStatement.setString(3, question.getTopics());
-//			insertStatement.setString(4, question.getType());
+			insertStatement.setString(3, question.getTopics().toString());
+			insertStatement.setString(4, question.getType().toString());
 			insertStatement.execute();
 
 		} catch (SQLException e) {
@@ -47,8 +47,6 @@ select * from question;*/
 	}
 
 	public void update(Question question) {
-		
-
 		
 		try (Connection connection = JDBC.getConnection();
 			PreparedStatement updateStatement = connection.prepareStatement(UPDATE_STATEMENT)){

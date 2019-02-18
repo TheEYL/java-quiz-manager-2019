@@ -3,15 +3,15 @@ package fr.epita.quiz.services;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.sql.SQLException;
 import fr.epita.quiz.datamodel.Admin;
 import fr.epita.quiz.datamodel.AdminList;
+import fr.epita.quiz.datamodel.Question;
 
 
 public class JDBCADMIN {
- static final String SEARCH_STATEMENT = "SELECT * FROM ADMIN" ;
+private static final String SEARCH_STATEMENT = "SELECT * FROM ADMIN" ;
+private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION, DIFFICULTY, TOPICS, Q_TYPE) values (?, ? ,? ,?);" ;
  
  public static AdminList getAdmins() {
 		AdminList resultList = new AdminList();
@@ -45,6 +45,22 @@ public class JDBCADMIN {
 		}
 		return resultList;
 	}
- 
- 
+  
+ public static void create(Question question) {
+		
+		try (Connection connection = JDBC.getConnection();
+				PreparedStatement insertStatement = connection.prepareStatement(INSERT_STATEMENT);) {
+			
+			insertStatement.setString(1, question.getQuestion());
+			insertStatement.setInt(2, question.getDifficulty());
+			
+			insertStatement.setString(3, question.getTopics().toString());
+			insertStatement.setString(4, question.getType().toString());
+			insertStatement.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	} 
 }
