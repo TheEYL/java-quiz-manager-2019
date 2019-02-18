@@ -73,7 +73,7 @@ private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION,
  * This method first populates the question table and then 
  * gets the ID from that table as Foreign key to populate the MCQ_Question table 
  */
-public static void createMCQ(MCQ_Question question) {
+public static void createMCQ(Question question) {
 	final String search_query ="SELECT ID from QUESTIONS WHERE QUESTION = ? AND DIFFICULTY = ?  AND TOPICS = ? AND Q_TYPE = ?";
 	final String insert_mcq_statement = "INSERT INTO MCQ_QUESTIONS (Q_ID, ANSWER, CHOICE1, CHOICE2,CHOICE3) values (?,?,?,?,?);";
 	int id = 0 ;
@@ -131,7 +131,7 @@ public static void createMCQ(MCQ_Question question) {
  * This method first populates the question table and then 
  * gets the ID from that table as Foreign key to populate the OPEN_Question table 
  */
- public static void createOPEN(OPEN_Question question) {
+ public static void createOPEN(Question question) {
 	 
  }
  /**
@@ -139,7 +139,7 @@ public static void createMCQ(MCQ_Question question) {
  * This method first populates the question table and then 
  * gets the ID from that table as Foreign key to populate the ASS_Question table 
  */
- public static void createASS(ASS_Question question) {
+ public static void createASS(Question question) {
 	 
  }
 }

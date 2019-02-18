@@ -8,7 +8,10 @@ import org.h2.tools.RunScript;
 import static fr.epita.logger.Logger.*;
 
 import fr.epita.quiz.authentication.Authenticate;
+import fr.epita.quiz.datamodel.ASS_Question;
 import fr.epita.quiz.datamodel.MCQ_Question;
+import fr.epita.quiz.datamodel.OPEN_Question;
+import fr.epita.quiz.datamodel.Question;
 import fr.epita.quiz.services.JDBC;
 import fr.epita.quiz.services.JDBCADMIN;
 
@@ -84,7 +87,8 @@ public class Launcher {
 				switch (answer) {
 				case "1":
 					logMessage("Sub Menu: Creating questions:");
-					chooseQuestionType(getAnswer(scan, "Enter type: (m -> MCQ| o -> open | a -> associative"));
+					Question question = null;
+					chooseQuestionType(question, getAnswer(scan, "Enter type: (m -> MCQ| o -> open | a -> associative"));
 					break;
 				case "2":
 					logMessage("Sub Menu: enter your search keyword: ");
@@ -113,13 +117,13 @@ public class Launcher {
 	}
 
 
-	private static void chooseQuestionType(String type  ) {
+	private static void chooseQuestionType(Question question,String type ) {
 
 		switch (type.toLowerCase()) {
 		case "m":
-			MCQ_Question question = new MCQ_Question();
+			question = new MCQ_Question();
          	question.setType(type);
-			question.setQuestion(getAnswer(scan, "Enter question: "));
+			question.setQuestion(getAnswer(scan, "Enter MCQ question: "));
 			question.setAnswer(getAnswer(scan, "Enter answer: "));
 			question.setChoice1(getAnswer(scan, "Enter choice1: "));
 			question.setChoice2(getAnswer(scan, "Enter choice2: "));
@@ -129,10 +133,17 @@ public class Launcher {
 			JDBCADMIN.createMCQ(question);
 			break;
 		case "o":
-			
+		    question = new OPEN_Question();	
+		    question.setType(type);
+		    question.setQuestion(getAnswer(scan, "Enter OPEN question: "));
+			JDBCADMIN.createOPEN(question);
 			break;
 		case "a":
+			question = new ASS_Question();
+			question.setType(type);
+		    question.setQuestion(getAnswer(scan, "Enter ASSOCIATIVE question: "));
 
+			JDBCADMIN.createASS(question);
 			break;
 		default:
 			break;

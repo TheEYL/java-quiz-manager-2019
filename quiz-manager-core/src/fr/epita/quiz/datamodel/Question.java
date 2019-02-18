@@ -1,8 +1,6 @@
 package fr.epita.quiz.datamodel;
 
-import java.util.ArrayList;
-
-public class Question {
+public abstract class Question {
 
 	private int id;
 	
@@ -92,4 +90,45 @@ public class Question {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+
+	public abstract String getChoice1() ;
+	
+
+	public abstract void setChoice1(String choice1) ;
+	
+
+	public abstract String getChoice2() ;
+	
+
+	public abstract void setChoice2(String choice2) ;
+	
+
+	public abstract String getAnswer() ;
+	
+
+	public abstract void setAnswer(String answer);
+
+	public void setChoice3(String choice3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getChoice3() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getMatch_string() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setMatch_string(String match_string) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+
 }
