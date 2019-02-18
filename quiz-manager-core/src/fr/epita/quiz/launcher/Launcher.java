@@ -1,12 +1,15 @@
 package fr.epita.quiz.launcher;
 
+import java.io.FileReader;
 import java.util.Scanner;
+
+import org.h2.tools.RunScript;
 
 import static fr.epita.logger.Logger.*;
 
 import fr.epita.quiz.authentication.Authenticate;
 import fr.epita.quiz.datamodel.Question;
-import fr.epita.quiz.datamodel.TopicsList;
+import fr.epita.quiz.services.JDBC;
 import fr.epita.quiz.services.JDBCADMIN;
 
 public class Launcher {
@@ -15,6 +18,8 @@ public class Launcher {
 		private static String userName ="";
 		private static String password="";
 		public static void main (String[] args) {
+
+//		importSchema();
 		logMessage("Welcome to the Quiz manager app");
 		logMessage(" Choose option:");
 		logMessage(" 1.Take a test. \n 2.Login as admin");
@@ -43,6 +48,15 @@ public class Launcher {
 		scan.close();
 }
 
+		private static void importSchema() {
+			try {
+					
+					RunScript.execute(JDBC.getConnection(), new FileReader("sql/quiz_schema.sql"));
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+
 private static void showAdminMenu(String userName, String password) {
 	if (Authenticate.authenticate(userName, password)) {
 		logMessage("user " + userName + "authenticated succesfully");
@@ -63,11 +77,8 @@ private static void showAdminMenu(String userName, String password) {
 				question.setType(getAnswer(scan, "Enter type: (m -> MCQ| o -> open | a -> associative"));
 				question.setQuestion(getAnswer(scan, "Enter question: "));
 				question.setDifficulty(Integer.parseInt(getAnswer(scan, "Enter difficulty: ")));
-				TopicsList list = new TopicsList();
-				list.setTopicList((getAnswer(scan, "Enter topics: (comma seperated)")));
-				question.setTopics(list);
+				question.setTopics(getAnswer(scan, "Enter topics: (comma seperated)"));
 				JDBCADMIN.create(question);
-
 				break;
 			case "2":
 				logMessage("Sub Menu: enter your search keyword: ");

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import fr.epita.quiz.datamodel.Admin;
 import fr.epita.quiz.datamodel.AdminList;
 import fr.epita.quiz.datamodel.Question;
-
+import static fr.epita.logger.Logger.*;
 
 public class JDBCADMIN {
 private static final String SEARCH_STATEMENT = "SELECT * FROM ADMIN" ;
@@ -57,10 +57,22 @@ private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION,
 			insertStatement.setString(3, question.getTopics().toString());
 			insertStatement.setString(4, question.getType().toString());
 			insertStatement.execute();
-
+            logMessage("Question created successfully");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
 	} 
+ 
+ public static void createMCQ(Question question) {
+	 
+ }
+ 
+ public static void createOPEN(Question question) {
+	 
+ }
+ 
+ public static void createASS(Question question) {
+	 
+ }
 }
