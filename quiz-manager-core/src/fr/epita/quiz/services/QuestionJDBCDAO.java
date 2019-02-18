@@ -21,7 +21,7 @@ DELETE FROM QUESTION WHERE ID = 3;
 
 
 select * from question;*/
-   private static final String INSERT_STATEMENT = "INSERT INTO QUESTION (QUESTION, DIFFICULTY) VALUES (?, ?)";
+   private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION, DIFFICULTY, TOPICS,TYPE) VALUES (?,? ?,?)";
    private static final String SEARCH_STATEMENT = "SELECT * FROM QUESTION";
    private static final String UPDATE_STATEMENT = "UPDATE QUESTION SET QUESTION=?, DIFFICULTY=? WHERE ID=?";
    private static final String DELETE_STATEMENT = "DELETE FROM QUESTION WHERE ID = ?";
@@ -30,12 +30,14 @@ select * from question;*/
 	
 	public void create(Question question) {
 		
-		try (Connection connection = getConnection();
+		try (Connection connection = JDBC.getConnection();
 				PreparedStatement insertStatement = connection.prepareStatement(INSERT_STATEMENT);) {
 			
 			insertStatement.setString(1, question.getQuestion());
 			insertStatement.setInt(2, question.getDifficulty());
 			
+//			insertStatement.setString(3, question.getTopics());
+//			insertStatement.setString(4, question.getType());
 			insertStatement.execute();
 
 		} catch (SQLException e) {
@@ -48,7 +50,7 @@ select * from question;*/
 		
 
 		
-		try (Connection connection = getConnection();
+		try (Connection connection = JDBC.getConnection();
 			PreparedStatement updateStatement = connection.prepareStatement(UPDATE_STATEMENT)){
 			updateStatement.setString(1, question.getQuestion());
 			updateStatement.setInt(2, question.getDifficulty());
@@ -60,18 +62,11 @@ select * from question;*/
 		
 	}
 
-	private Connection getConnection() throws SQLException {
-		Configuration conf = Configuration.getInstance();
-		String jdbcUrl = conf.getConfigurationValue("jdbc.url");
-		String user = conf.getConfigurationValue("jdbc.user");
-		String password = conf.getConfigurationValue("jdbc.password");
-		Connection connection = DriverManager.getConnection(jdbcUrl, user, password);
-		return connection;
-	}
+	
 
 	public void delete(Question question) {
 		
-		try (Connection connection = getConnection();
+		try (Connection connection = JDBC.getConnection();
 			PreparedStatement deleteStatement = connection.prepareStatement(DELETE_STATEMENT)){
 			deleteStatement.setInt(1, question.getId());
 			deleteStatement.executeQuery();
@@ -93,7 +88,7 @@ select * from question;*/
 	      
 	      */
 		String selectQuery = "select  from QUESTION WHERE ";
-		try (Connection connection = getConnection();
+		try (Connection connection = JDBC.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
 				) {
 
