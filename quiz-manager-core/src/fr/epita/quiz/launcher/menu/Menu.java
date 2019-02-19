@@ -62,17 +62,19 @@ public class Menu {
 	private static void showStudentMenu() {
 		// TODO Auto-generated method stub
 		boolean exit = false;
-
 		do {
+			String topicList = "";
+			int difficulty =0;
 			Student student = new Student();
 			String exit_string = "";
 			student.setName(getAnswer(scan, "Please enter your name: "));
 			JDBCSTUDENT.createStudent(student);
 			logMessage("Here's the list of topics:");
 			logMessage("Choose quiz topics: (comma seperated values)");
-			showTopics();
-			selectDifficulty();
-			String answer = getAnswer(scan,"Setup Complete. Press (s) to start quiz. (q) to exit");
+			topicList = showTopics();
+			difficulty = selectDifficulty();
+			JDBCSTUDENT.LoadStudentQuestions(topicList, difficulty);
+			String answer = getAnswer(scan," Press (s) to start quiz. (q) to exit");
 			switch (answer) {
 			case "s":
 				showQuiz();
@@ -98,12 +100,15 @@ public class Menu {
 	private static void showQuiz() {
 		// TODO Auto-generated method stub
 
+//		logMessage("Loaded Questions");
 	}
 
 
-	private static void selectDifficulty() {
-		// TODO Auto-generated method stub
+	private static int selectDifficulty() {
 
+		// TODO Auto-generated method stub
+		return Integer.parseInt(getAnswer(scan, "Choose MAX difficulty:"));
+		 
 	}
 
 
@@ -111,14 +116,18 @@ public class Menu {
 	 * Shows users the list of topics in the database
 	 * Allows users to select topics for the quiz
 	 */
-	private static void showTopics() {
+	private static String showTopics() {
 		// TODO Auto-generated method stub
+		String topicList = "";
 		try {
 			logMessage(JDBCSTUDENT.getTopics().toString());
+			topicList = getAnswer(scan, "Enter topics:");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return topicList;
 
 	}
 

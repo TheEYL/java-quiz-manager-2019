@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS STUDENTS_ANSWERS (
 					ID INT AUTO_INCREMENT PRIMARY KEY,
 					Q_ID INT,
 					ANSWER VARCHAR(1024),
+					IS_CORRECT VARCHAR(1024),
 					S_ID INT,
 					foreign key (Q_ID) references QUESTIONS(ID),
 					foreign key (S_ID) references STUDENTS(ID)
