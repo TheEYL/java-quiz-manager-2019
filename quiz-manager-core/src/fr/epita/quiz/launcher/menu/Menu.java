@@ -87,6 +87,7 @@ public class Menu {
 				exit_string = getAnswer(scan, "do you confirm you want to exit the student menu? (y/N)?");
 
 				exit = "y".equals(exit_string);
+				clearScreen();
 				launcherMenu();
 				break;
 			default:
@@ -101,6 +102,7 @@ public class Menu {
 		// TODO Auto-generated method stub
 
 //		logMessage("Loaded Questions");
+		 clearScreen();
 	}
 
 
@@ -178,6 +180,7 @@ public class Menu {
 					answer = getAnswer(scan, "do you confirm you want to exit the admin menu(y/N)?");
 
 					exit = "y".equals(answer);
+					clearScreen();
 					launcherMenu();
 					break;
 				default:
@@ -229,4 +232,9 @@ public class Menu {
 		logMessage(question);
 		return scanner.nextLine();
 	}
+	
+	public static void clearScreen() {  
+	    System.out.print("\033[H\033[2J");  
+	    System.out.flush();  
+	}	
 }
