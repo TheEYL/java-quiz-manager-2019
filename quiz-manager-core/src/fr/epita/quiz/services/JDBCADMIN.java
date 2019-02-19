@@ -1,23 +1,25 @@
 package fr.epita.quiz.services;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import fr.epita.quiz.datamodel.ASS_Question;
+import org.h2.jdbc.JdbcSQLException;
+import org.h2.tools.RunScript;
+
 import fr.epita.quiz.datamodel.Admin;
 import fr.epita.quiz.datamodel.AdminList;
-import fr.epita.quiz.datamodel.MCQ_Question;
-import fr.epita.quiz.datamodel.OPEN_Question;
 import fr.epita.quiz.datamodel.Question;
+
 import static fr.epita.logger.Logger.*;
 
 public class JDBCADMIN {
 private static final String SEARCH_STATEMENT = "SELECT * FROM ADMIN" ;
 private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION, DIFFICULTY, TOPICS, Q_TYPE) values (?, ? ,? ,?);" ;
  
- public static AdminList getAdmins() {
+ public static AdminList getAdmins() throws JdbcSQLException, SQLException {
 		AdminList resultList = new AdminList();
 		
 		/*SELECT 
@@ -45,11 +47,30 @@ private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION,
 			}
 			results.close();
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			logMessage("could not get admin list");
+		}		
+
 		return resultList;
 	}
-  
+ public static void firstLoad() {
+	 try (Connection connection = JDBC.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) from ADMIN;");
+				) { 
+                     preparedStatement.executeQuery();
+		 
+	 } catch (Exception e) {
+		// TODO Auto-generated catch block
+		 
+		 logMessage("This seems to be the first time you are running the application:");
+		 logMessage("Creating and inserting sample questions.");
+			try {
+				RunScript.execute(JDBC.getConnection(), new FileReader("sql/quiz_schema.sql"));
+				RunScript.execute(JDBC.getConnection(), new FileReader("sql/insert_statements.sql"));
+			} catch (Exception ex) {
+				logMessage("could not create tables and sambple questions");
+			} 
+	}
+ }
  public static void create(Question question) {
 		
 		try (Connection connection = JDBC.getConnection();
@@ -74,12 +95,12 @@ private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION,
  * gets the ID from that table as Foreign key to populate the MCQ_Question table 
  */
 public static void createMCQ(Question question) {
-	final String search_query ="SELECT ID from QUESTIONS WHERE QUESTION = ? AND DIFFICULTY = ?  AND TOPICS = ? AND Q_TYPE = ?";
+	final String id_search_query ="SELECT ID from QUESTIONS WHERE QUESTION = ? AND DIFFICULTY = ?  AND TOPICS = ? AND Q_TYPE = ?";
 	final String insert_mcq_statement = "INSERT INTO MCQ_QUESTIONS (Q_ID, ANSWER, CHOICE1, CHOICE2,CHOICE3) values (?,?,?,?,?);";
 	int id = 0 ;
 	try (Connection connection = JDBC.getConnection();
 			PreparedStatement insertStatement = connection.prepareStatement(INSERT_STATEMENT);
-		    PreparedStatement searchQuery =  connection.prepareStatement(search_query);	
+		    PreparedStatement searchQuery =  connection.prepareStatement(id_search_query);	
 			PreparedStatement insertMcq  = connection.prepareStatement(insert_mcq_statement);
 			) {
 		
@@ -123,7 +144,8 @@ public static void createMCQ(Question question) {
         }
 
 	} catch (SQLException e) {
-		e.printStackTrace();
+//		e.printStackTrace();
+		logMessage("Something went wrong. \n Could not create MCQ question");
 	} 
  }
  /**
