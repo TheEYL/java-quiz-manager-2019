@@ -147,15 +147,16 @@ public class JDBCSTUDENT {
 
 
 	private static StringBuilder questionQueryBuilder(String topicList, int difficulty) {
-		final String  where_clause	 = "a.TOPICS LIKE ";
+		final String  where_clause	 = " a.TOPICS LIKE ";
 		StringBuilder sb = new StringBuilder(QUESTION_QUERY_BUILDER);
 		String[] parts = topicList.split(",");		 
 		int i = 0; 
 		for (String string : parts) {
 			sb.append(where_clause);
 			sb.append("'%" +string +"%'");
-			if (i < parts.length -1)
-				sb.append("OR");
+			if (i < parts.length -1) {
+				sb.append(" OR");
+			}
 			i++;
 		}
 		
