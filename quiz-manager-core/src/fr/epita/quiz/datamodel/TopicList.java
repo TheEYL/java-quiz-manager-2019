@@ -1,9 +1,10 @@
 package fr.epita.quiz.datamodel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class TopicsList{
+public class TopicList{
 
 	private  List<Topic> topicsList = null;
 
@@ -17,12 +18,23 @@ public class TopicsList{
 			  topicsList.add(new Topic(string));
 		}
 	}
-
+	/**
+	 * @param list
+	 * returns unique list of topics to seach from
+	 */
+	public void setUniqueTopicList(String list) {
+		this.topicsList =  new ArrayList<Topic>();
+		String[] parts = list.split(",");
+		parts = Arrays.stream(parts).distinct().toArray(String[]::new); 
+		for (String string : parts) {
+				  topicsList.add(new Topic(string));
+		}
+	}
 	public List<Topic> getTopicsList() {
 		return this.topicsList;
 	}
 
-	public TopicsList () {
+	public TopicList () {
 			this.topicsList = new ArrayList<>() ;
 	}
 
@@ -31,7 +43,7 @@ public class TopicsList{
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		int i  = 0;
-		for (Topic topic : topicsList) {
+		for (Topic topic : this.topicsList) {
 				
 			if (i < topicsList.size() -1)
 					{

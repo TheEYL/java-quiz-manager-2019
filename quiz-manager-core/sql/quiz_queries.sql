@@ -7,3 +7,8 @@
 --				'higa', 'pain', 'kon');
 
 SELECT ID from QUESTIONS WHERE QUESTION LIKE '%fox%';
+
+SELECT a.Q_TYPE , a.QUESTION, a.TOPICS, b.* 
+FROM QUESTIONS AS a 
+JOIN MCQ_QUESTIONS AS b
+ON a.id = b.Q_id where a.topics LIKE '%fox%';

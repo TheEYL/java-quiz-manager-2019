@@ -1,7 +1,7 @@
 package fr.epita.quiz.tests.topics;
 
 import fr.epita.quiz.datamodel.Topic;
-import fr.epita.quiz.datamodel.TopicsList;
+import fr.epita.quiz.datamodel.TopicList;
 
 public class TopicsLauncher {
 
@@ -11,7 +11,7 @@ public class TopicsLauncher {
 //		Topic topic2 = new Topic("c++");
 //		Topic topic3 = new Topic("sql");
 
-        TopicsList list = new TopicsList();
+        TopicList list = new TopicList();
 	list.getTopicsList().add(topic);
 		
 	    System.out.println(list);	

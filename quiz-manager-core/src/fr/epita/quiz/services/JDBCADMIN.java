@@ -1,14 +1,11 @@
 package fr.epita.quiz.services;
 
-import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.h2.jdbc.JdbcSQLException;
-import org.h2.tools.RunScript;
-
 import fr.epita.quiz.datamodel.Admin;
 import fr.epita.quiz.datamodel.AdminList;
 import fr.epita.quiz.datamodel.Question;
@@ -52,25 +49,7 @@ private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION,
 
 		return resultList;
 	}
- public static void firstLoad() {
-	 try (Connection connection = JDBC.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) from ADMIN;");
-				) { 
-                     preparedStatement.executeQuery();
-		 
-	 } catch (Exception e) {
-		// TODO Auto-generated catch block
-		 
-		 logMessage("This seems to be the first time you are running the application:");
-		 logMessage("Creating and inserting sample questions.");
-			try {
-				RunScript.execute(JDBC.getConnection(), new FileReader("sql/quiz_schema.sql"));
-				RunScript.execute(JDBC.getConnection(), new FileReader("sql/insert_statements.sql"));
-			} catch (Exception ex) {
-				logMessage("could not create tables and sambple questions");
-			} 
-	}
- }
+
  public static void create(Question question) {
 		
 		try (Connection connection = JDBC.getConnection();

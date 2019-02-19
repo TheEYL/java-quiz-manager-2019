@@ -16,18 +16,20 @@ import fr.epita.quiz.datamodel.ASS_Question;
 import fr.epita.quiz.datamodel.MCQ_Question;
 import fr.epita.quiz.datamodel.OPEN_Question;
 import fr.epita.quiz.datamodel.Question;
+import fr.epita.quiz.datamodel.Student;
 import fr.epita.quiz.services.JDBC;
 import fr.epita.quiz.services.JDBCADMIN;
+import fr.epita.quiz.services.JDBCSTUDENT;
 
 public class Menu {
 	private static Scanner scan = new Scanner(System.in);
 	private static String userName ="";
-	private static String password="";
+	private static String password ="";
 	public static void launcherMenu() {
 		importSchema();
 		logMessage("Welcome to the Quiz manager app");
 		logMessage("Choose option:");
-		logMessage("1.Take a test. \n 2.Login as admin");
+		logMessage("1.Take a test. \n 2.Login as admin. ");
 
 		while(scan.hasNextLine()) {
 			switch (scan.nextLine()) {
@@ -45,6 +47,9 @@ public class Menu {
 				break;
 			case "3":
 				//TODO:exit app fxn
+				String exit= getAnswer(scan,"Are you sure you want to exit? (y|n)");
+				boolean b =  "y".equals(exit);
+				if (b) return;
 				break;
 			default:
 				break;
@@ -57,10 +62,14 @@ public class Menu {
 	private static void showStudentMenu() {
 		// TODO Auto-generated method stub
 		boolean exit = false;
+
 		do {
-			String name = getAnswer(scan, "Please enter your name");
+			Student student = new Student();
+			String exit_string = "";
+			student.setName(getAnswer(scan, "Please enter your name: "));
+			JDBCSTUDENT.createStudent(student);
 			logMessage("Here's the list of topics:");
-			logMessage("Choose quiz topics: (comma seperated values");
+			logMessage("Choose quiz topics: (comma seperated values)");
 			showTopics();
 			selectDifficulty();
 			String answer = getAnswer(scan,"Setup Complete. Press (s) to start quiz. (q) to exit");
@@ -73,9 +82,9 @@ public class Menu {
 				//TODO program update and delete after displaying the list
 				break;
 			case "q":
-				name = getAnswer(scan, "do you confirm you want to exit the student menu? (y/N)?");
+				exit_string = getAnswer(scan, "do you confirm you want to exit the student menu? (y/N)?");
 
-				exit = "y".equals(name);
+				exit = "y".equals(exit_string);
 				launcherMenu();
 				break;
 			default:
@@ -104,6 +113,12 @@ public class Menu {
 	 */
 	private static void showTopics() {
 		// TODO Auto-generated method stub
+		try {
+			logMessage(JDBCSTUDENT.getTopics().toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -112,7 +127,7 @@ public class Menu {
 	 * Creates quiz tables and inserts default admin user 
 	 */
 	private static void importSchema() {
-		JDBCADMIN.firstLoad();
+		JDBC.firstLoad();
 		
 	}
 

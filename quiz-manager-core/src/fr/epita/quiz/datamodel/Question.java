@@ -5,7 +5,7 @@ public abstract class Question {
 	private int id;
 	
 	private String question; 
-	private TopicsList topics;	 
+	private TopicList topics;	 
 	private Integer difficulty;
 	private QuestionType type;
 
@@ -51,7 +51,7 @@ public abstract class Question {
 
 	}
 	
-	public Question(String question, TopicsList topics, Integer difficulty, QuestionType type) {
+	public Question(String question, TopicList topics, Integer difficulty, QuestionType type) {
 		this.question = question;
 		this.topics = topics;
 		this.difficulty = difficulty;
@@ -65,14 +65,14 @@ public abstract class Question {
 	public void setQuestion(String question) {
 		this.question = question;
 	}
-	public TopicsList getTopics() {
+	public TopicList getTopics() {
 		return topics;
 	}
-	public void setTopics(TopicsList topics) {
+	public void setTopics(TopicList topics) {
 		this.topics = topics;
 	}
 	public void setTopics( String list) {
-		TopicsList tlist= new TopicsList();
+		TopicList tlist= new TopicList();
 		 tlist.setTopicList(list);
          this.topics =tlist;
 	}
