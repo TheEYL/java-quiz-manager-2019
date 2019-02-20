@@ -26,9 +26,9 @@ The program allows you to take a test or to create, read, update and delete ques
 1. Login as admin with default credentials. username:admin, password:admin.
 2. Select action to undertake:
 
-        2.1 Create question
-                2.1.1 choose question type.
-                <s>2.2 Read questions. Displays all questions id</s>
-        <s>2.3 Update questions. give Id and new question. (Can only update in this manner of now)</s>
+ * 2.1 Create question
+    *         2.1.1 choose question type.
+ *  ~2.2 Read questions. Displays all questions id~
+ *  ~2.3 Update questions. give Id and new question. (Can only update in this manner of now)~
 
-       <s> 2.4 Delete questions. give Id and question will be deleted.</s>
+ *  ~2.4 Delete questions. give Id and question will be deleted.~
