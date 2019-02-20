@@ -24,7 +24,10 @@ public class Configuration {
 		try (InputStream is = new FileInputStream(new File(confLocation))) {
 			properties.load(is);
 		} catch (IOException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+		}catch (NullPointerException e) {
+			System.err.println("Please make sure that the h2 server is running....");
+			
 		}
 
 	}
