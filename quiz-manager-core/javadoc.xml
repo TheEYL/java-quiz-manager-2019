@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="/home/leo/Documents/Development/epita/epita-dev/java/h2-1.4.197.jar" destdir="javadocs" doctitle="quiz-manager-java-docs" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="fr.epita.logger,fr.epita.quiz.launcher.menu,fr.epita.quiz.tests.topics,fr.epita.quiz.tests.JDBC,fr.epita.quiz.launcher,fr.epita.quiz.services,fr.epita.quiz.authentication,fr.epita.quiz.datamodel" source="1.8" sourcepath="src" splitindex="true" use="true" version="true">
+            <link href="file:/home/leo/git/java-quiz-manager-2019/javadocs/"/>
+            <link href="https://docs.oracle.com/javase/8/docs/api/"/>
+            <link href="http://docs.oracle.com/javase/8/javafx/api/"/>
+        </javadoc>
+    </target>
+</project>

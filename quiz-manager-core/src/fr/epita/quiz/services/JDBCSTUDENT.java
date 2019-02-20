@@ -27,12 +27,13 @@ import fr.epita.quiz.datamodel.TopicList;
 import static fr.epita.quiz.datamodel.QuestionType.*;
 
 /**
- * @author leo
  * Does database operations related to the student taking a test
  * gets topics
  * creates student
  * save answer
  * export response to txt file.
+ * @author leo
+ * 
  */
 public class JDBCSTUDENT {
 
@@ -53,7 +54,7 @@ public class JDBCSTUDENT {
 			+ "AS c  ON a.id = c.Q_id"
 			+ " where b.S_NAME LIKE "; 
 	/**
-	 * @return
+	 * @return listof students
 	 * @throws JdbcSQLException
 	 * @throws SQLException
 	 */
@@ -74,7 +75,6 @@ public class JDBCSTUDENT {
 				PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_TOPIC_STATEMENT);
 				) {
 
-
 			ResultSet results = preparedStatement.executeQuery();
 			while (results.next()) {
 
@@ -93,7 +93,7 @@ public class JDBCSTUDENT {
 
 
 	/**
-	 * @return
+	 * @return list of topics
 	 * @throws JdbcSQLException
 	 * @throws SQLException
 	 */
@@ -134,8 +134,8 @@ public class JDBCSTUDENT {
 	}
 
 	/**
-	 * @param student
-	 * @return
+	 * @param student This is the student object that has to created in the database
+	 * @return true if the student was actually created.
 	 */
 	public static boolean createStudent(Student student)  {
 

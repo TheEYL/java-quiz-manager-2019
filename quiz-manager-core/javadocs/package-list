@@ -1,0 +1,8 @@
+fr.epita.logger
+fr.epita.quiz.authentication
+fr.epita.quiz.datamodel
+fr.epita.quiz.launcher
+fr.epita.quiz.launcher.menu
+fr.epita.quiz.services
+fr.epita.quiz.tests.JDBC
+fr.epita.quiz.tests.topics

@@ -24,8 +24,8 @@ import fr.epita.quiz.services.JDBCADMIN;
 import fr.epita.quiz.services.JDBCSTUDENT;
 
 /**
- * @author leo
  * This class shows and handles the various menus shown in the application
+ * @author leo
  */
 public class Menu {
 	private static Scanner scan = new Scanner(System.in);
@@ -73,12 +73,6 @@ public class Menu {
 	 *  "Select the difficulty"
 	 *  
 	 */
-	/**
-	 * 
-	 */
-	/**
-	 * 
-	 */
 	private static void showStudentMenu() {
 		// TODO Auto-generated method stub
 		boolean exit = false;
@@ -115,7 +109,7 @@ public class Menu {
 
 
 	/**
-	 * @param student
+	 * @param student this current student
 	 * Checks if the name given by the user is already in the database. 
 	 * Prompts again if the user already exits.
 	 */
@@ -128,9 +122,9 @@ public class Menu {
 
 
 	/**
-	 * @param student
-	 * @return
 	 * Creates a user
+	 * @param student this currenct student
+	 * @return  true if student was created 
 	 */
 	private static boolean createNewStudent(Student student) {
 		student.setName(getAnswer(scan, "Please enter your name: "));
@@ -141,11 +135,12 @@ public class Menu {
 
 
 	/**
-	 * @param questionList
-	 * @param student
 	 * shows the quiz and gets the answers from the user
 	 * then saves the quiz to the database and creates a
 	 *  file with the questions answered
+	 *  
+	 * @param questionList current list of questions from db
+	 * @param student  current student taking the test
 	 */
 	private static void showQuiz(QuestionList questionList, Student student) {
 		// TODO Auto-generated method stub
@@ -185,10 +180,10 @@ public class Menu {
 
 
 	/**
-	 * @param student
-	 * @param choices_array
-	 * @param shuffled_choices
-	 * @param question_id
+	 * @param student current student taking the test
+	 * @param choices_array  correct answer amongs the list of choices
+	 * @param shuffled_choices shuffled list of choices
+	 * @param question_id the current question id
 	 * @return index array that corresponds to the user choice
 	 */
 	private static int getStudentAnswer(Student student, String choices_array, String[] shuffled_choices, int question_id) {
@@ -369,8 +364,8 @@ public class Menu {
 	}
 
 	/**
-	 * @param scanner
-	 * @param question
+	 * @param scanner input scanner
+	 * @param question current question
 	 * @return string from the console
 	 */
 	public static String getAnswer(Scanner scanner, String question) {
@@ -378,8 +373,8 @@ public class Menu {
 		return scanner.nextLine();
 	}
 	/**
-	 * @param scanner
-	 * @param question
+	 * @param scanner input scanner
+	 * @param question current question
 	 * @return number from the console
 	 */
 	public static int getInt(Scanner scanner, String question) {

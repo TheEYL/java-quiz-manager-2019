@@ -9,11 +9,7 @@ import static fr.epita.quiz.launcher.menu.Menu.*;
 public class Launcher {
 
 	public static void main (String[] args) {
-
-			launcherMenu();
+			launcherMenu();	
 	}
-
-
-	
 
 }
