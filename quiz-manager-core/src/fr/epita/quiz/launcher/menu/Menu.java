@@ -81,8 +81,10 @@ public class Menu {
 			int difficulty =0;
 			Student student = new Student();
 			String exit_string = "";
-			student.setName(getAnswer(scan, "Please enter your name: "));
-			JDBCSTUDENT.createStudent(student);
+			boolean user_already_exist=false;
+			do {
+				user_already_exist = createNewStudent(student);
+			}while(!user_already_exist);
 			logMessage("Here's the list of topics:");
 			logMessage("Choose quiz topics: (comma seperated values)");
 			topicList = showTopics();
@@ -106,6 +108,15 @@ public class Menu {
 			}
 		} while (!exit);	
 		launcherMenu();
+	}
+
+
+	private static boolean createNewStudent(Student student) {
+		student.setName(getAnswer(scan, "Please enter your name: "));
+		
+			return JDBCSTUDENT.createStudent(student);
+		
+		
 	}
 
 
@@ -201,7 +212,7 @@ public class Menu {
 
 				return Integer.parseInt(getAnswer(scan, "Choose MAX difficulty:"));
 			} catch (Exception e) {
-				 System.err.println("what did you insert?!. Try again with a number."); 
+				System.err.println("what did you insert?!. Try again with a number."); 
 			}	
 
 		}while(!ran);
@@ -223,10 +234,10 @@ public class Menu {
 			logMessage(JDBCSTUDENT.getTopics().toString());
 			do {
 				topicList = getAnswer(scan, "Enter topics:");
-					if (!topicList.isEmpty())
-							correct_topic = true;
-			} while (correct_topic);	
-			} catch (SQLException e) {
+				if (!topicList.isEmpty())
+					correct_topic = true;
+			} while (!correct_topic);	
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

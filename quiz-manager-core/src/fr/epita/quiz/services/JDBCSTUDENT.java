@@ -115,7 +115,7 @@ public class JDBCSTUDENT {
 		return resultList;
 	}
 
-	public static void createStudent(Student student) {
+	public static boolean createStudent(Student student)  {
 
 		try (Connection connection = JDBC.getConnection();
 				PreparedStatement insertStatement = connection.prepareStatement(INSERT_STATEMENT);) {
@@ -124,9 +124,11 @@ public class JDBCSTUDENT {
 
 			insertStatement.execute();
 			logMessage(" Student successfully created");
-		} catch (SQLException e) {
+			return true;
+		} catch (Exception e) {
 //			e.printStackTrace();
 			logMessage("Student names have to be unique.");
+			return false;
 		}
 
 	}
