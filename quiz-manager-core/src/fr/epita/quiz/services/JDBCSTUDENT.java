@@ -125,7 +125,8 @@ public class JDBCSTUDENT {
 			insertStatement.execute();
 			logMessage(" Student successfully created");
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			logMessage("Student names have to be unique.");
 		}
 
 	}
@@ -149,8 +150,13 @@ public class JDBCSTUDENT {
 
 	public static void exportResultsToFile(Student student, int score, int total) throws IOException {
 		StringBuilder sb = new StringBuilder(RESULTS_QUERY_BUILDER);
-		File tmp =  new File(  student.getName()+"_responses.txt");				
+		File theDir = new File("students_responses");
+		if (!theDir.exists()) theDir.mkdirs();
+		File tmp =  new File("students_responses/"+  student.getName()+"_responses.txt");				
 		tmp.createNewFile();
+		
+//		File directory = new File(tmp.getParentFile().getAbsolutePath());
+//		directory.mkdirs();
 		sb.append("'%")
 		.append(student.getName())
 		.append("%';");
