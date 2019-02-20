@@ -27,6 +27,7 @@ public class JDBCSTUDENT {
 	private static final String SEARCH_STUDENT_STATEMENT = "SELECT * FROM STUDENTS" ;
 	private static final String SEARCH_TOPIC_STATEMENT = "SELECT TOPICS FROM QUESTIONS" ;
 	private static final String INSERT_STATEMENT = "INSERT INTO STUDENTS (NAME) values (?);" ;
+	private static final String INSERT_ANSWER_STATEMENT = "INSERT INTO STUDENTS_ANSWERS (Q_ID, S_NAME, ANSWER, IS_CORRECT) values (?,?,?,?);" ;
 	private static final String QUESTION_QUERY_BUILDER = "SELECT a.Q_TYPE , a.QUESTION, a.TOPICS, b.* , a.DIFFICULTY " + 
 			"FROM QUESTIONS AS a " + 
 			"JOIN MCQ_QUESTIONS AS b " + 
@@ -112,6 +113,23 @@ public class JDBCSTUDENT {
 
 			insertStatement.execute();
 			logMessage(" Student successfully created");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+	public static void saveAnswer(Student student, int question_id) {
+
+		try (Connection connection = JDBC.getConnection();
+				PreparedStatement insertStatement = connection.prepareStatement(INSERT_ANSWER_STATEMENT);) {
+
+			insertStatement.setInt(1, question_id);
+			insertStatement.setString(2, student.getName());
+			insertStatement.setString(3, student.getMcq_Choice().getStud_answer());
+			insertStatement.setString(4, String.valueOf(student.getMcq_Choice().Is_valid()));
+
+			insertStatement.execute();
+			logMessage("save complete");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

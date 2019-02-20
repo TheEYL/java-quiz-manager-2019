@@ -80,22 +80,19 @@ public class Menu {
 			switch (answer) {
 			case "s":
 				showQuiz(questionList, student);
-				break;
-			case "2":
-				System.out.println("Sub Menu: enter your search keyword: ");
-				//TODO program update and delete after displaying the list
+				exit_string = getAnswer(scan, "do you want to exit the student menu? (y/N)?");
+				exit = "y".equals(exit_string);
 				break;
 			case "q":
 				exit_string = getAnswer(scan, "do you confirm you want to exit the student menu? (y/N)?");
 				exit = "y".equals(exit_string);
 				clearScreen();
-				launcherMenu();
 				break;
 			default:
 				break;
 			}
 		} while (!exit);	
-
+             launcherMenu();
 	}
 
 
@@ -106,10 +103,21 @@ public class Menu {
 		 clearScreen();
          for (Question question : questionList.getQuestionList() ) {
         	 String[] choices_array = question.getMcq_Choice().getChoice();
+        	 String[] shuffled_choices =  question.getMcq_Choice().shuffledChoices();
         	 logMessage(question.toString());
-        	 logMessage(question.getMcq_Choice().toString());
-        	 getStudentAnswer(student, choices_array);
-		}
+        	 StringBuilder sb = new StringBuilder();
+
+				 int i = 1;
+				 for (String string : shuffled_choices) {
+					 if (string!= null ) {
+					  sb.append("\n("+i+") " + question.getMcq_Choice().getChoice()[i-1]);
+					  i++;
+					 }
+				 }
+
+        	 logMessage(sb.toString());
+        	 getStudentAnswer(student, choices_array[0], shuffled_choices, question.getId());
+		}	
         
          logMessage("Saving responses...");
          logMessage("Quiz done");
@@ -118,17 +126,23 @@ public class Menu {
 	}
 
 
-	private static void getStudentAnswer(Student student, String[] choices_array) {
+	private static void getStudentAnswer(Student student, String choices_array, String[] shuffled_choices, int question_id) {
 		// TODO Auto-generated method stub
 		int choice;
 		String selection = "";
 		boolean answered = false;
 		do {
 		choice = getInt(scan, "Choose answer: (type number)") ;
-			if (! (choice > choices_array.length) && ! (choice <= 0)) {
-				selection   = choices_array[choice - 1];
+			if (! (choice > shuffled_choices.length) && ! (choice <= 0)) {
+				selection   = shuffled_choices[choice - 1];
 				logMessage("You selected: " + selection);
 				student.setMcq_Choice(selection);
+				if (selection == choices_array) {
+						student.getMcq_Choice().setIs_valid(true);
+//					System.out.println("Answer is valid");
+				}
+//				System.err.println("Answer is not valid");
+				JDBCSTUDENT.saveAnswer(student, question_id);
 				answered = true;
 			}else {
 				logMessage("wrong choice. try again.");
@@ -212,12 +226,13 @@ public class Menu {
 
 					exit = "y".equals(answer);
 					clearScreen();
-					launcherMenu();
 					break;
 				default:
 					break;
 				}
 			} while (!exit);
+
+					launcherMenu();
 		}else {
 			logMessage("not authenticated, exiting");
 			logMessage("authentication failure for the user: " + userName);
