@@ -4,14 +4,14 @@
 In your "run configurations" > "arguments" set "VM arguments to"
 
         -Dconf.location=app.properties
-        
+
 ## Database connection
 To enable multiple user connections on the database 'test.db' we use
 
         jdbc.url=jdbc:h2:tcp://localhost/./testdb;FILE_LOCK=NO
-        
 
-## User guide. 
+
+## User guide.
 
 The program allows you to take a test or to create, read, update and delete questions.
 
@@ -28,8 +28,7 @@ The program allows you to take a test or to create, read, update and delete ques
 
         2.1 Create question
                 2.1.1 choose question type.
-        2.2 Read questions. Displays all questions id
+                <s>2.2 Read questions. Displays all questions id</s>
+        <s>2.3 Update questions. give Id and new question. (Can only update in this manner of now)</s>
 
-        2.3 Update questions. give Id and new question. (Can only update in this manner of now)
-
-        2.4 Delete questions. give Id and question will be deleted. 
+       <s> 2.4 Delete questions. give Id and question will be deleted.</s>
