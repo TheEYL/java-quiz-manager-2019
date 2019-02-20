@@ -2,6 +2,10 @@ package fr.epita.quiz.services;
 
 import static fr.epita.logger.Logger.logMessage;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +28,7 @@ import static fr.epita.quiz.datamodel.QuestionType.*;
 
 public class JDBCSTUDENT {
 
-	private static final String SEARCH_STUDENT_STATEMENT = "SELECT * FROM STUDENTS" ;
+//	private static final String SEARCH_STUDENT_STATEMENT = "SELECT * FROM STUDENTS" ;
 	private static final String SEARCH_TOPIC_STATEMENT = "SELECT TOPICS FROM QUESTIONS" ;
 	private static final String INSERT_STATEMENT = "INSERT INTO STUDENTS (NAME) values (?);" ;
 	private static final String INSERT_ANSWER_STATEMENT = "INSERT INTO STUDENTS_ANSWERS (Q_ID, S_NAME, ANSWER, IS_CORRECT) values (?,?,?,?);" ;
@@ -33,6 +37,13 @@ public class JDBCSTUDENT {
 			"JOIN MCQ_QUESTIONS AS b " + 
 			"ON a.id = b.Q_id WHERE " ;
 
+	private static final String RESULTS_QUERY_BUILDER = "SELECT a.Q_TYPE , a.QUESTION, "
+			+ "a.TOPICS, b.*, c.ANSWER AS CORRECT_ANSWER "
+			+ " FROM QUESTIONS AS a  "
+			+ "JOIN STUDENTS_ANSWERS AS b "
+			+ "ON a.id = b.Q_id JOIN MCQ_QUESTIONS "
+			+ "AS c  ON a.id = c.Q_id"
+			+ " where b.S_NAME LIKE "; 
 	public static StudentList getStudents() throws JdbcSQLException, SQLException {
 		StudentList resultList = new StudentList();
 
@@ -136,6 +147,52 @@ public class JDBCSTUDENT {
 
 	}
 
+	public static void exportResultsToFile(Student student, int score, int total) throws IOException {
+		StringBuilder sb = new StringBuilder(RESULTS_QUERY_BUILDER);
+		File tmp =  new File(  student.getName()+"_responses.txt");				
+		tmp.createNewFile();
+		sb.append("'%")
+		.append(student.getName())
+		.append("%';");
+		try (Connection connection = JDBC.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+				ResultSet results = preparedStatement.executeQuery();
+				FileWriter fstream = new FileWriter(tmp);
+				BufferedWriter out = new BufferedWriter(fstream);
+				){
+					
+			 while(results.next()) {
+				 out.write("_______________________________________\n");
+				 out.write("QUESTION TYPE: ");
+				 out.write((results.getString("Q_TYPE")) + ", ");
+				 out.newLine(); 
+				 out.write("QUESTION: ");
+				 out.newLine(); 
+			     out.write((results.getString("QUESTION")).toUpperCase() + ", ");
+			     out.newLine(); 
+
+				 out.write("TOPICS: ");
+			     out.write(results.getString("TOPICS") + ", ");
+
+			     out.newLine(); 
+			     out.write("You answered: ");
+			     out.write(results.getString("ANSWER") + ", ");
+			     out.write("Your answer was:" );
+			     out.write((results.getString("IS_CORRECT")) + ", ");
+			     out.write("The correct answer was: ");
+			     out.write(results.getString("CORRECT_ANSWER").toUpperCase() + ", ");
+			     out.newLine(); 
+			     out.write("Your score was " + score + " out of "+ total);
+			     out.newLine(); 
+			     out.write("-----------------------------------------\n");
+			 }
+
+
+		}catch (Exception e) {
+			// TODO: handle exceptiono
+			logMessage(e.toString());
+		}
+	}
 	public static QuestionList LoadStudentQuestions (String topicList, int difficulty) {
 		StringBuilder sb = questionQueryBuilder(topicList, difficulty);
 

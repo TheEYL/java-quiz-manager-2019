@@ -3,6 +3,7 @@ package fr.epita.quiz.launcher.menu;
 import static fr.epita.logger.Logger.logMessage;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -26,6 +27,7 @@ public class Menu {
 	private static Scanner scan = new Scanner(System.in);
 	private static String userName ="";
 	private static String password ="";
+	private static int score =0;
 	public static void launcherMenu() {
 		importSchema();
 		logMessage("Welcome to the Quiz manager app");
@@ -117,18 +119,25 @@ public class Menu {
 
         	 logMessage(sb.toString());
         	 getStudentAnswer(student, choices_array[0], shuffled_choices, question.getId());
+        	
 		}	
         
+         logMessage("You scored " + score + " out of" + questionList.getQuestionList().size());
          logMessage("Saving responses...");
          logMessage("Quiz done");
-
+        try {
+			JDBCSTUDENT.exportResultsToFile(student, score, questionList.getQuestionList().size());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
          clearScreen();
 	}
 
 
-	private static void getStudentAnswer(Student student, String choices_array, String[] shuffled_choices, int question_id) {
+	private static int getStudentAnswer(Student student, String choices_array, String[] shuffled_choices, int question_id) {
 		// TODO Auto-generated method stub
-		int choice;
+		int choice ;
 		String selection = "";
 		boolean answered = false;
 		do {
@@ -139,6 +148,7 @@ public class Menu {
 				student.setMcq_Choice(selection);
 				if (selection == choices_array) {
 						student.getMcq_Choice().setIs_valid(true);
+						score++;
 //					System.out.println("Answer is valid");
 				}
 //				System.err.println("Answer is not valid");
@@ -148,6 +158,8 @@ public class Menu {
 				logMessage("wrong choice. try again.");
 			}
 		} while(!answered);
+		
+		return score;
 	}
 
 
