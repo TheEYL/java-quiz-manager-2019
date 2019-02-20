@@ -1,5 +1,9 @@
 package fr.epita.quiz.datamodel;
 
+/**
+ * @author leo
+ * POJO ASSOCIATIVE QUESTION
+ */
 public class ASS_Question extends Question{
 
 	private String match_string;

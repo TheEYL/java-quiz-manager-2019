@@ -1,5 +1,9 @@
 package fr.epita.quiz.datamodel;
 
+/**
+ * @author leo
+ * POJO Open questions
+ */
 public class OPEN_Question extends Question{
 
 	private String answer;

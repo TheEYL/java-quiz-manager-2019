@@ -3,6 +3,10 @@ package fr.epita.quiz.datamodel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author leo
+ * Stores list of questions
+ */
 public class QuestionList {
 	private List<Question> questionList;
 	public QuestionList() {

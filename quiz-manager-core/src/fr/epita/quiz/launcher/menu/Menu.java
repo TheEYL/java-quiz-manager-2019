@@ -73,6 +73,12 @@ public class Menu {
 	 *  "Select the difficulty"
 	 *  
 	 */
+	/**
+	 * 
+	 */
+	/**
+	 * 
+	 */
 	private static void showStudentMenu() {
 		// TODO Auto-generated method stub
 		boolean exit = false;
@@ -81,10 +87,7 @@ public class Menu {
 			int difficulty =0;
 			Student student = new Student();
 			String exit_string = "";
-			boolean user_already_exist=false;
-			do {
-				user_already_exist = createNewStudent(student);
-			}while(!user_already_exist);
+			checkStudentName(student);
 			logMessage("Here's the list of topics:");
 			logMessage("Choose quiz topics: (comma seperated values)");
 			topicList = showTopics();
@@ -93,29 +96,46 @@ public class Menu {
 			questionList = JDBCSTUDENT.LoadStudentQuestions(topicList, difficulty);
 			String answer = getAnswer(scan," Press (s) to start quiz. (q) to exit");
 			switch (answer) {
-			case "s":
-				showQuiz(questionList, student);
-				exit_string = getAnswer(scan, "do you want to exit the student menu? (y/N)?");
-				exit = "y".equals(exit_string);
-				break;
-			case "q":
-				exit_string = getAnswer(scan, "do you confirm you want to exit the student menu? (y/N)?");
-				exit = "y".equals(exit_string);
-				clearScreen();
-				break;
-			default:
-				break;
+				case "s":
+					showQuiz(questionList, student);
+					exit_string = getAnswer(scan, "do you want to exit the student menu? (y/N)?");
+					exit = "y".equals(exit_string);
+					break;
+				case "q":
+					exit_string = getAnswer(scan, "do you confirm you want to exit the student menu? (y/N)?");
+					exit = "y".equals(exit_string);
+					clearScreen();
+					break;
+				default:
+					break;
 			}
 		} while (!exit);	
 		launcherMenu();
 	}
 
 
+	/**
+	 * @param student
+	 * Checks if the name given by the user is already in the database. 
+	 * Prompts again if the user already exits.
+	 */
+	private static void checkStudentName(Student student) {
+		boolean user_already_exist=false;
+		do {
+			user_already_exist = createNewStudent(student);
+		}while(!user_already_exist);
+	}
+
+
+	/**
+	 * @param student
+	 * @return
+	 * Creates a user
+	 */
 	private static boolean createNewStudent(Student student) {
 		student.setName(getAnswer(scan, "Please enter your name: "));
 		
 			return JDBCSTUDENT.createStudent(student);
-		
 		
 	}
 
@@ -200,7 +220,7 @@ public class Menu {
 
 
 	/**
-	 * @return difficulty choosen by the user
+	 * @return difficulty chosen by the user
 	 */
 	private static int selectDifficulty() {
 

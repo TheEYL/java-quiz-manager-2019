@@ -10,6 +10,11 @@ import fr.epita.quiz.datamodel.Admin;
 import fr.epita.quiz.datamodel.AdminList;
 import fr.epita.quiz.services.JDBCADMIN;
 
+/**
+ * @author leo
+ *
+ *This class authenticates the admin user
+ */
 public class Authenticate {
 
 
@@ -25,6 +30,11 @@ public class Authenticate {
 	//	}
 
 
+	/**
+	 * @param userName
+	 * @param password
+	 * @return authentication status
+	 */
 	public static boolean authenticate(String userName, String password) {
 		AdminList admins = null;
 		try {

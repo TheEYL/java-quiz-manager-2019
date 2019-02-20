@@ -7,6 +7,10 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author leo
+ * Utility to log messages to the console to files.
+ */
 public class Logger {
 
 	private static PrintWriter writer;

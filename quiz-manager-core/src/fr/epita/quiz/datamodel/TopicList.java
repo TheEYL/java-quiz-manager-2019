@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author leo
+ * List of topics
+ */
 public class TopicList{
 
 	private  List<Topic> topicsList = null;

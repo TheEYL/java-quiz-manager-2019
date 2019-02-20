@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * @author leo
+ * Singleton configuration class. Reads read configurations from app.properities files
+ */
 public class Configuration {
 
 	private Properties properties;

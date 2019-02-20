@@ -12,11 +12,24 @@ import fr.epita.quiz.datamodel.Question;
 
 import static fr.epita.logger.Logger.*;
 
+/**
+ * @author leo
+ * Does all the database operations in relation to the admin user.
+ * create question
+ * read questions
+ * update questions
+ * delete questions
+ */
 public class JDBCADMIN {
 private static final String SEARCH_STATEMENT = "SELECT * FROM ADMIN" ;
 private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION, DIFFICULTY, TOPICS, Q_TYPE) values (?, ? ,? ,?);" ;
  
- public static AdminList getAdmins() throws JdbcSQLException, SQLException {
+ /**
+ * @return list of admins in the database
+ * @throws JdbcSQLException
+ * @throws SQLException
+ */
+public static AdminList getAdmins() throws JdbcSQLException, SQLException {
 		AdminList resultList = new AdminList();
 		
 		/*SELECT 
@@ -50,7 +63,11 @@ private static final String INSERT_STATEMENT = "INSERT INTO QUESTIONS (QUESTION,
 		return resultList;
 	}
 
- public static void create(Question question) {
+ /**
+ * @param question
+ * create question
+ */
+public static void create(Question question) {
 		
 		try (Connection connection = JDBC.getConnection();
 				PreparedStatement insertStatement = connection.prepareStatement(INSERT_STATEMENT);) {

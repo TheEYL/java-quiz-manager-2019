@@ -1,9 +1,15 @@
 package fr.epita.quiz.datamodel;
 
-import java.awt.List;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * @author leo
+ *  MCQ choice class
+ *  stores the choices
+ *  shuffles the choices
+ *  gets the student answer
+ */
 public class MCQ_Choice {
  
 //	private Map <Integer, String> mcq_choice = new HashMap();	

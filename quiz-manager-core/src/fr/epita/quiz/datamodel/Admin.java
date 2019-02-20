@@ -1,5 +1,9 @@
 package fr.epita.quiz.datamodel;
 
+/**
+ * @author leo
+ * Admin pojo class
+ */
 public class Admin {
 
 	private String userName;

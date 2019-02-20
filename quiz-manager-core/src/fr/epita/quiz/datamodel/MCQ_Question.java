@@ -1,7 +1,10 @@
 package fr.epita.quiz.datamodel;
 
-import fr.epita.logger.Logger;
-
+/**
+ * @author leo
+ * pojo MCQ question
+ * 
+ */
 public class MCQ_Question extends Question {
 
 	private String choice1;

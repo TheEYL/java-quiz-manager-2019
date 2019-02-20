@@ -26,6 +26,14 @@ import fr.epita.quiz.datamodel.StudentList;
 import fr.epita.quiz.datamodel.TopicList;
 import static fr.epita.quiz.datamodel.QuestionType.*;
 
+/**
+ * @author leo
+ * Does database operations related to the student taking a test
+ * gets topics
+ * creates student
+ * save answer
+ * export response to txt file.
+ */
 public class JDBCSTUDENT {
 
 //	private static final String SEARCH_STUDENT_STATEMENT = "SELECT * FROM STUDENTS" ;
@@ -44,6 +52,11 @@ public class JDBCSTUDENT {
 			+ "ON a.id = b.Q_id JOIN MCQ_QUESTIONS "
 			+ "AS c  ON a.id = c.Q_id"
 			+ " where b.S_NAME LIKE "; 
+	/**
+	 * @return
+	 * @throws JdbcSQLException
+	 * @throws SQLException
+	 */
 	public static StudentList getStudents() throws JdbcSQLException, SQLException {
 		StudentList resultList = new StudentList();
 
@@ -79,6 +92,11 @@ public class JDBCSTUDENT {
 	}
 
 
+	/**
+	 * @return
+	 * @throws JdbcSQLException
+	 * @throws SQLException
+	 */
 	public static TopicList getTopics() throws JdbcSQLException, SQLException {
 		TopicList resultList = new TopicList();
 
@@ -115,6 +133,10 @@ public class JDBCSTUDENT {
 		return resultList;
 	}
 
+	/**
+	 * @param student
+	 * @return
+	 */
 	public static boolean createStudent(Student student)  {
 
 		try (Connection connection = JDBC.getConnection();
@@ -132,6 +154,10 @@ public class JDBCSTUDENT {
 		}
 
 	}
+	/**
+	 * @param student
+	 * @param question_id
+	 */
 	public static void saveAnswer(Student student, int question_id) {
 
 		try (Connection connection = JDBC.getConnection();
@@ -150,6 +176,12 @@ public class JDBCSTUDENT {
 
 	}
 
+	/**
+	 * @param student
+	 * @param score
+	 * @param total
+	 * @throws IOException
+	 */
 	public static void exportResultsToFile(Student student, int score, int total) throws IOException {
 		StringBuilder sb = new StringBuilder(RESULTS_QUERY_BUILDER);
 		File theDir = new File("students_responses");
@@ -201,6 +233,11 @@ public class JDBCSTUDENT {
 			logMessage(e.toString());
 		}
 	}
+	/**
+	 * @param topicList
+	 * @param difficulty
+	 * @return
+	 */
 	public static QuestionList LoadStudentQuestions (String topicList, int difficulty) {
 		StringBuilder sb = questionQueryBuilder(topicList, difficulty);
 
@@ -242,6 +279,11 @@ public class JDBCSTUDENT {
 	}
 
 
+	/**
+	 * @param topicList
+	 * @param difficulty
+	 * @return
+	 */
 	private static StringBuilder questionQueryBuilder(String topicList, int difficulty) {
 		final String  where_clause	 = " a.TOPICS LIKE ";
 		StringBuilder sb = new StringBuilder(QUESTION_QUERY_BUILDER);
@@ -262,6 +304,14 @@ public class JDBCSTUDENT {
 		return sb;
 
 	}
+	/**
+	 * @param question
+	 * @param type
+	 * @param results
+	 * @return
+	 * @throws SQLException
+	 * @throws NullPointerException
+	 */
 	private static Question chooseQuestionType(Question question,String type, ResultSet results ) throws SQLException, NullPointerException{
 		//results.getString(1)// is ttype
 		switch (type) {

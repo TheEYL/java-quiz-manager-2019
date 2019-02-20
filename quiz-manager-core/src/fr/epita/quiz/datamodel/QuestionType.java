@@ -1,5 +1,9 @@
 package fr.epita.quiz.datamodel;
 
+/**
+ * @author leo
+ * defines the different types of questions
+ */
 public enum QuestionType {
  MCQ("mcq") , OPEN("open"), ASSOCIATIVE("associative");
 	

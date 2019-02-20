@@ -1,5 +1,9 @@
 package fr.epita.quiz.datamodel;
 
+/**
+ * @author leo
+ * This class serves to define the other question types.
+ */
 public abstract class Question {
 
 	private int id;
@@ -8,7 +12,6 @@ public abstract class Question {
 	private TopicList topics;	 
 	private Integer difficulty;
 	private QuestionType type;
-    private Answer answer;
 
 	public QuestionType getType() {
 		return type;
