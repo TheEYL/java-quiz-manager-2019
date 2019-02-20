@@ -1,11 +1,14 @@
 package fr.epita.quiz.datamodel;
 
+import fr.epita.logger.Logger;
+
 public class MCQ_Question extends Question {
 
 	private String choice1;
 	private String choice2;
 	private String choice3;
 	private String Answer;
+	private MCQ_Choice mcq_Choice;
 	public String getAnswer() {
 		return Answer;
 	}
@@ -41,5 +44,27 @@ public class MCQ_Question extends Question {
 	public void setChoice3(String choice3) {
 		this.choice3 = choice3;
 	}
-	
+	@Override
+	public MCQ_Choice getMcq_Choice() {
+		return mcq_Choice;
+	}
+	@Override
+	public void setMcq_Choice() {
+		String [] choice = new String[]{this.Answer,this.choice1,this.choice2,this.choice3};
+		this.mcq_Choice = new MCQ_Choice(choice);
+	}
+	@Override
+	public String toString() {
+		StringBuilder sb  = new StringBuilder();
+		
+//		sb.append("[Id: " + this.getId())
+		sb.append(" ")
+		.append(this.getQuestion().toUpperCase())
+		.append("\n")
+		.append("\n")
+		.append("----------------------------")
+		;
+		return sb.toString();
+	}
+	 
 }

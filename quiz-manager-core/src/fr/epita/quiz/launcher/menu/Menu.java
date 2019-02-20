@@ -16,6 +16,7 @@ import fr.epita.quiz.datamodel.ASS_Question;
 import fr.epita.quiz.datamodel.MCQ_Question;
 import fr.epita.quiz.datamodel.OPEN_Question;
 import fr.epita.quiz.datamodel.Question;
+import fr.epita.quiz.datamodel.QuestionList;
 import fr.epita.quiz.datamodel.Student;
 import fr.epita.quiz.services.JDBC;
 import fr.epita.quiz.services.JDBCADMIN;
@@ -73,11 +74,12 @@ public class Menu {
 			logMessage("Choose quiz topics: (comma seperated values)");
 			topicList = showTopics();
 			difficulty = selectDifficulty();
-			JDBCSTUDENT.LoadStudentQuestions(topicList, difficulty);
+			QuestionList questionList = new QuestionList(); 
+			questionList = JDBCSTUDENT.LoadStudentQuestions(topicList, difficulty);
 			String answer = getAnswer(scan," Press (s) to start quiz. (q) to exit");
 			switch (answer) {
 			case "s":
-				showQuiz();
+				showQuiz(questionList, student);
 				break;
 			case "2":
 				System.out.println("Sub Menu: enter your search keyword: ");
@@ -85,7 +87,6 @@ public class Menu {
 				break;
 			case "q":
 				exit_string = getAnswer(scan, "do you confirm you want to exit the student menu? (y/N)?");
-
 				exit = "y".equals(exit_string);
 				clearScreen();
 				launcherMenu();
@@ -98,11 +99,41 @@ public class Menu {
 	}
 
 
-	private static void showQuiz() {
+	private static void showQuiz(QuestionList questionList, Student student) {
 		// TODO Auto-generated method stub
 
 //		logMessage("Loaded Questions");
 		 clearScreen();
+         for (Question question : questionList.getQuestionList() ) {
+        	 String[] choices_array = question.getMcq_Choice().getChoice();
+        	 logMessage(question.toString());
+        	 logMessage(question.getMcq_Choice().toString());
+        	 getStudentAnswer(student, choices_array);
+		}
+        
+         logMessage("Saving responses...");
+         logMessage("Quiz done");
+
+         clearScreen();
+	}
+
+
+	private static void getStudentAnswer(Student student, String[] choices_array) {
+		// TODO Auto-generated method stub
+		int choice;
+		String selection = "";
+		boolean answered = false;
+		do {
+		choice = getInt(scan, "Choose answer: (type number)") ;
+			if (! (choice > choices_array.length) && ! (choice <= 0)) {
+				selection   = choices_array[choice - 1];
+				logMessage("You selected: " + selection);
+				student.setMcq_Choice(selection);
+				answered = true;
+			}else {
+				logMessage("wrong choice. try again.");
+			}
+		} while(!answered);
 	}
 
 
@@ -232,9 +263,11 @@ public class Menu {
 		logMessage(question);
 		return scanner.nextLine();
 	}
-	
+	public static int getInt(Scanner scanner, String question) {
+		logMessage(question);
+		return scanner.nextInt();
+	}
 	public static void clearScreen() {  
-	    System.out.print("\033[H\033[2J");  
-	    System.out.flush();  
+		logMessage("--------------------------------------------------------->");
 	}	
 }

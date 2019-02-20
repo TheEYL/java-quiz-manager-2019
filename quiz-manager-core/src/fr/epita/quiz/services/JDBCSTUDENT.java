@@ -11,17 +11,23 @@ import javax.print.attribute.standard.NumberOfDocuments;
 
 import org.h2.jdbc.JdbcSQLException;
 
+import fr.epita.quiz.datamodel.ASS_Question;
+import fr.epita.quiz.datamodel.MCQ_Question;
+import fr.epita.quiz.datamodel.OPEN_Question;
 import fr.epita.quiz.datamodel.Question;
+import fr.epita.quiz.datamodel.QuestionList;
+import fr.epita.quiz.datamodel.QuestionType;
 import fr.epita.quiz.datamodel.Student;
 import fr.epita.quiz.datamodel.StudentList;
 import fr.epita.quiz.datamodel.TopicList;
+import static fr.epita.quiz.datamodel.QuestionType.*;
 
 public class JDBCSTUDENT {
 
 	private static final String SEARCH_STUDENT_STATEMENT = "SELECT * FROM STUDENTS" ;
 	private static final String SEARCH_TOPIC_STATEMENT = "SELECT TOPICS FROM QUESTIONS" ;
 	private static final String INSERT_STATEMENT = "INSERT INTO STUDENTS (NAME) values (?);" ;
-	private static final String QUESTION_QUERY_BUILDER = "SELECT a.Q_TYPE , a.QUESTION, a.TOPICS, b.* " + 
+	private static final String QUESTION_QUERY_BUILDER = "SELECT a.Q_TYPE , a.QUESTION, a.TOPICS, b.* , a.DIFFICULTY " + 
 			"FROM QUESTIONS AS a " + 
 			"JOIN MCQ_QUESTIONS AS b " + 
 			"ON a.id = b.Q_id WHERE " ;
@@ -112,38 +118,45 @@ public class JDBCSTUDENT {
 
 	}
 
-	public static void LoadStudentQuestions (String topicList, int difficulty) {
+	public static QuestionList LoadStudentQuestions (String topicList, int difficulty) {
 		StringBuilder sb = questionQueryBuilder(topicList, difficulty);
 
 		try (Connection connection = JDBC.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-					ResultSet results = preparedStatement.executeQuery();
+				ResultSet results = preparedStatement.executeQuery();
 				) {
-			
-//			 logMessage(results.toString());	
-			 int number_of_questions = 0;
+			//			 logMessage(results.toString());	
+			int number_of_questions = 0;
+			Question question = null;
+
+			QuestionList questionList = new QuestionList();
 			while (results.next()) {
-				results.getString(1); // question type
-				results.getString(2); // question details
-				results.getString(3); // topics
-				results.getInt(4); // mcq id
-				results.getInt(5); // question id
-				results.getString(6); //answer
-				results.getString(7); //choice 1
-				results.getString(8); //choice 2
-				results.getString(9); //choice 3
+				//				results.getString(1); // question type
+				//				results.getString(2); // question details
+				//				results.getString(3); // topics
+				//				results.getInt(4); // mcq id
+				//				results.getInt(5); // question id
+				//				results.getString(6); //answer
+				//				results.getString(7); //choice 1
+				//				results.getString(8); //choice 2
+				//				results.getString(9); //choice 3
+				question  = chooseQuestionType(question, results.getString(1), results);
+				question.setMcq_Choice();
+				questionList.getQuestionList().add(question);
 				number_of_questions++;
 
 			}
 
-			
-			 logMessage("Loaded "+ number_of_questions+ "questions");
 
-	}catch (Exception e) {
-		// TODO: handle exception
-		logMessage(e.getMessage());
+			logMessage("Loaded "+ number_of_questions+ " questions.");
+		
+			return questionList;
+		}catch (Exception e) {
+			// TODO: handle exception
+			logMessage(e.getMessage());
+		}
+		 return null;
 	}
-}
 
 
 	private static StringBuilder questionQueryBuilder(String topicList, int difficulty) {
@@ -159,13 +172,48 @@ public class JDBCSTUDENT {
 			}
 			i++;
 		}
-		
+
 		if (difficulty > 0)
-//			sb.append("AND a.DIFFICULTY LIKE" + " '%" + difficulty + "%'");
+			//			sb.append("AND a.DIFFICULTY LIKE" + " '%" + difficulty + "%'");
 			sb.append("AND a.DIFFICULTY <=" + difficulty );
 		return sb;
 
 	}
-	
+	private static Question chooseQuestionType(Question question,String type, ResultSet results ) throws SQLException, NullPointerException{
+		//results.getString(1)// is ttype
+		switch (type) {
+		case  "mcq":
+			question = new MCQ_Question();
+			question.setType(type);
+			question.setQuestion(results.getString(2));
+			question.setAnswer(results.getString(6));
+			question.setId(results.getInt(5));
+			question.setChoice1(results.getString(7));
+			question.setChoice2(results.getString(8));
+			question.setChoice3(results.getString(9));
+			question.setDifficulty(results.getInt(10));
+			question.setTopics(results.getString(3));
+			return question;
+			//			break;
+		case "open":
+			question = new OPEN_Question();	
+			question.setType(type);
+			question.setQuestion(results.getString(2));
+			return (question);
+			//			break;
+		case "associative":
+			question = new ASS_Question();
+			question.setType(type);
+			question.setQuestion(results.getString(2));
+
+			return question;
+			//			break;
+		default:
+			break;
+		}
+		return question;
+	}
+
+
 }
 

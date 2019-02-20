@@ -1,9 +1,4 @@
-INSERT INTO QUESTIONS (QUESTION, TOPICS, DIFFICULTY, Q_TYPE) 
-				values ('what does the fox say?', 
-				'fox', 1, 'mcq');
-INSERT INTO MCQ_QUESTIONS (Q_ID, ANSWER, CHOICE1, CHOICE2) 
-				values (1, 
-				'higa', 'pain', 'kon');
+
 INSERT INTO QUESTIONS (QUESTION, DIFFICULTY, TOPICS, Q_TYPE) values ('Another valentine', 1 ,'valantine,love,lonliness' ,'mcq');
 INSERT INTO MCQ_QUESTIONS (Q_ID, ANSWER, CHOICE1, CHOICE2,CHOICE3) values (1,'no','jonny','i hate lonliness but lonliness loves me',null);
 
@@ -30,4 +25,9 @@ INSERT INTO QUESTIONS (QUESTION, DIFFICULTY, TOPICS, Q_TYPE) values ('who is tha
 INSERT INTO MCQ_QUESTIONS (Q_ID, ANSWER, CHOICE1, CHOICE2,CHOICE3) values (11,'paris','killer','josuke','is that a jojos reference');
 INSERT INTO QUESTIONS (QUESTION, DIFFICULTY, TOPICS, Q_TYPE) values ('did you watch the x files', 1 ,'jojo, stand' ,'mcq');
 INSERT INTO MCQ_QUESTIONS (Q_ID, ANSWER, CHOICE1, CHOICE2,CHOICE3) values (12,'yes','killer','josuke','is that a jojos reference');
-
+INSERT INTO QUESTIONS (QUESTION, TOPICS, DIFFICULTY, Q_TYPE) 
+				values ('what does the fox say?', 
+				'fox', 13, 'mcq');
+INSERT INTO MCQ_QUESTIONS (Q_ID, ANSWER, CHOICE1, CHOICE2) 
+				values (13, 
+				'higa', 'pain', 'kon');

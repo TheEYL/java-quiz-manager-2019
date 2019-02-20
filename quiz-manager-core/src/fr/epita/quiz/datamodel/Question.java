@@ -8,7 +8,7 @@ public abstract class Question {
 	private TopicList topics;	 
 	private Integer difficulty;
 	private QuestionType type;
-
+    private Answer answer;
 
 	public QuestionType getType() {
 		return type;
@@ -128,6 +128,18 @@ public abstract class Question {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public MCQ_Choice getMcq_Choice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setMcq_Choice() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	 
 	
 
 
