@@ -23,6 +23,10 @@ import fr.epita.quiz.services.JDBC;
 import fr.epita.quiz.services.JDBCADMIN;
 import fr.epita.quiz.services.JDBCSTUDENT;
 
+/**
+ * @author leo
+ * This class shows and handles the various menus shown in the application
+ */
 public class Menu {
 	private static Scanner scan = new Scanner(System.in);
 	private static String userName ="";
@@ -62,6 +66,13 @@ public class Menu {
 	}
 
 
+	/**
+	 * Show student Menu.
+	 * "You are about to take a test"
+	 *  "Choose the topics"
+	 *  "Select the difficulty"
+	 *  
+	 */
 	private static void showStudentMenu() {
 		// TODO Auto-generated method stub
 		boolean exit = false;
@@ -94,80 +105,109 @@ public class Menu {
 				break;
 			}
 		} while (!exit);	
-             launcherMenu();
+		launcherMenu();
 	}
 
 
+	/**
+	 * @param questionList
+	 * @param student
+	 * shows the quiz and gets the answers from the user
+	 * then saves the quiz to the database and creates a
+	 *  file with the questions answered
+	 */
 	private static void showQuiz(QuestionList questionList, Student student) {
 		// TODO Auto-generated method stub
 
-//		logMessage("Loaded Questions");
-		 clearScreen();
-         for (Question question : questionList.getQuestionList() ) {
-        	 String[] choices_array = question.getMcq_Choice().getChoice();
-        	 String[] shuffled_choices =  question.getMcq_Choice().shuffledChoices();
-        	 logMessage(question.toString());
-        	 StringBuilder sb = new StringBuilder();
+		//		logMessage("Loaded Questions");
+		clearScreen();
+		for (Question question : questionList.getQuestionList() ) {
+			String[] choices_array = question.getMcq_Choice().getChoice();
+			String[] shuffled_choices =  question.getMcq_Choice().shuffledChoices();
+			logMessage(question.toString());
+			StringBuilder sb = new StringBuilder();
 
-				 int i = 1;
-				 for (String string : shuffled_choices) {
-					 if (string!= null ) {
-					  sb.append("\n("+i+") " + question.getMcq_Choice().getChoice()[i-1]);
-					  i++;
-					 }
-				 }
+			int i = 1;
+			for (String string : shuffled_choices) {
+				if (string!= null ) {
+					sb.append("\n("+i+") " + question.getMcq_Choice().getChoice()[i-1]);
+					i++;
+				}
+			}
 
-        	 logMessage(sb.toString());
-        	 getStudentAnswer(student, choices_array[0], shuffled_choices, question.getId());
-        	
+			logMessage(sb.toString());
+			getStudentAnswer(student, choices_array[0], shuffled_choices, question.getId());
+
 		}	
-        
-         logMessage("You scored " + score + " out of" + questionList.getQuestionList().size());
-         logMessage("Saving responses...");
-         logMessage("Quiz done");
-        try {
+
+		logMessage("You scored " + score + " out of" + questionList.getQuestionList().size());
+		logMessage("Saving responses...");
+		logMessage("Quiz done");
+		try {
 			JDBCSTUDENT.exportResultsToFile(student, score, questionList.getQuestionList().size());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-         clearScreen();
+		clearScreen();
 	}
 
 
+	/**
+	 * @param student
+	 * @param choices_array
+	 * @param shuffled_choices
+	 * @param question_id
+	 * @return index array that corresponds to the user choice
+	 */
 	private static int getStudentAnswer(Student student, String choices_array, String[] shuffled_choices, int question_id) {
 		// TODO Auto-generated method stub
 		int choice ;
 		String selection = "";
 		boolean answered = false;
 		do {
-		choice = getInt(scan, "Choose answer: (type number)") ;
+			choice = getInt(scan, "Choose answer: (type number)") ;
 			if (! (choice > shuffled_choices.length) && ! (choice <= 0)) {
 				selection   = shuffled_choices[choice - 1];
 				logMessage("You selected: " + selection);
 				student.setMcq_Choice(selection);
 				if (selection == choices_array) {
-						student.getMcq_Choice().setIs_valid(true);
-						score++;
-//					System.out.println("Answer is valid");
+					student.getMcq_Choice().setIs_valid(true);
+					score++;
+					//					System.out.println("Answer is valid");
 				}
-//				System.err.println("Answer is not valid");
+				//				System.err.println("Answer is not valid");
 				JDBCSTUDENT.saveAnswer(student, question_id);
 				answered = true;
 			}else {
 				logMessage("wrong choice. try again.");
 			}
 		} while(!answered);
-		
+
 		return score;
 	}
 
 
+	/**
+	 * @return difficulty choosen by the user
+	 */
 	private static int selectDifficulty() {
 
 		// TODO Auto-generated method stub
-		return Integer.parseInt(getAnswer(scan, "Choose MAX difficulty:"));
-		 
+		boolean ran = false;
+
+		do {
+			try {
+
+				return Integer.parseInt(getAnswer(scan, "Choose MAX difficulty:"));
+			} catch (Exception e) {
+				 System.err.println("what did you insert?!. Try again with a number."); 
+			}	
+
+		}while(!ran);
+
+
+		return 0;
 	}
 
 
@@ -178,14 +218,19 @@ public class Menu {
 	private static String showTopics() {
 		// TODO Auto-generated method stub
 		String topicList = "";
+		boolean correct_topic = false;
 		try {
 			logMessage(JDBCSTUDENT.getTopics().toString());
-			topicList = getAnswer(scan, "Enter topics:");
-		} catch (SQLException e) {
+			do {
+				topicList = getAnswer(scan, "Enter topics:");
+					if (!topicList.isEmpty())
+							correct_topic = true;
+			} while (correct_topic);	
+			} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return topicList;
 
 	}
@@ -196,7 +241,7 @@ public class Menu {
 	 */
 	private static void importSchema() {
 		JDBC.firstLoad();
-		
+
 	}
 
 	/**
@@ -244,7 +289,7 @@ public class Menu {
 				}
 			} while (!exit);
 
-					launcherMenu();
+			launcherMenu();
 		}else {
 			logMessage("not authenticated, exiting");
 			logMessage("authentication failure for the user: " + userName);
@@ -253,6 +298,12 @@ public class Menu {
 	}
 
 
+	/**
+	 * @param question
+	 * @param type
+	 * 
+	 * Creates the correct object based on the type given.
+	 */
 	private static void chooseQuestionType(Question question,String type ) {
 
 		switch (type.toLowerCase()) {
@@ -286,14 +337,27 @@ public class Menu {
 		}
 	}
 
+	/**
+	 * @param scanner
+	 * @param question
+	 * @return string from the console
+	 */
 	public static String getAnswer(Scanner scanner, String question) {
 		logMessage(question);
 		return scanner.nextLine();
 	}
+	/**
+	 * @param scanner
+	 * @param question
+	 * @return number from the console
+	 */
 	public static int getInt(Scanner scanner, String question) {
 		logMessage(question);
 		return scanner.nextInt();
 	}
+	/**
+	 * Clears the console
+	 */
 	public static void clearScreen() {  
 		logMessage("--------------------------------------------------------->");
 	}	

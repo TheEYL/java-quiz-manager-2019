@@ -34,7 +34,8 @@ public class JDBC {
 					RunScript.execute(JDBC.getConnection(), new FileReader("sql/quiz_schema.sql"));
 					RunScript.execute(JDBC.getConnection(), new FileReader("sql/insert_statements.sql"));
 				} catch (Exception ex) {
-					logMessage("could not create tables and sambple questions");
+					System.err.println("could not create tables and sambple questions");
+					ex.printStackTrace();
 				} 
 		}
 	 }
